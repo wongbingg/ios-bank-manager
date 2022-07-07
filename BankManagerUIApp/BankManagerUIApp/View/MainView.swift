@@ -187,10 +187,28 @@ class MainView: UIView {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.preferredFont(forTextStyle: .title2)
+            if text.hasSuffix("대출") {
+                label.textColor = .systemPurple
+            }
             label.text = text
             label.textAlignment = .center
             return label
         }()
         waitingStackView.addArrangedSubview(processLabel)
+    }
+    
+    func startProcessing(text: String) {
+        let processLabel: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.preferredFont(forTextStyle: .title2)
+            if text.hasSuffix("대출") {
+                label.textColor = .systemPurple
+            }
+            label.text = text
+            label.textAlignment = .center
+            return label
+        }()
+        processingStackView.addArrangedSubview(processLabel)
     }
 }
