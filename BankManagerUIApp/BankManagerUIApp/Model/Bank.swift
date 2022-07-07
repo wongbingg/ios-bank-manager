@@ -8,6 +8,7 @@
 import Foundation
 
 struct Bank {
+    var delegate: Showable?
     private var bankManager: BankManager
     var queue: CustomerQueue
     private let loanBusinessQueue = DispatchQueue(label: "loanQueue", attributes: .concurrent)
@@ -46,7 +47,9 @@ struct Bank {
             putCustomerToSuitableQueue()
         }
         
-//        group.wait()
+        group.notify(queue: loanBusinessQueue) { [self] in
+            delegate?.allWorkisFinished()
+        }
     }
     
     private func putCustomerToSuitableQueue() {

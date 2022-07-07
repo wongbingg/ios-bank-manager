@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         let queue = CustomerQueue()
         manager.delegate = self
         bank = Bank(employee: manager, customer: queue)
+        bank?.delegate = self
         mainView = MainView(self)
         mainView?.addTenCustomerButton.addTarget(self, action: #selector(addTenCustomerButtonDidTapped), for: .touchUpInside)
         mainView?.resetButton.addTarget(self, action: #selector(resetButtonDidTapped), for: .touchUpInside)
@@ -58,16 +59,25 @@ class ViewController: UIViewController {
         self.counter += 0.001
         let currentTime = self.mFormatter.string(from: Date(timeIntervalSince1970: self.counter))
         self.mainView?.processTimeLabel.text = "업무시간 - \(currentTime)"
+        
     }
+    
+    
 }
 
 extension ViewController: Showable {
+    func allWorkisFinished() {
+        timer?.invalidate()
+        print("타이머 정지로직이 실행되었다")
+    }
+    
     func startProcess(about customer: Customer) { // 대기중 열에있는 업무를 업무중으로 옮기는 UI Update 구현
         let number = customer.number
         let business = customer.business
-        mainView?.waitingStackView.arrangedSubviews.forEach { // label 에 접근해야한다. 그 label이 제시된 string과 같다면 제거해주는 로직
-            if let label = $0 as? UILabel {
-                if label.text == "\(number) - \(business.name)" {
+        DispatchQueue.main.async { [self] in
+            mainView?.waitingStackView.arrangedSubviews.forEach { // label 에 접근해야한다. 그 label이 제시된 string과 같다면 제거해주는 로직
+                let label = $0 as? UILabel
+                if label?.text == "\(number) - \(business.name)" {
                     mainView?.waitingStackView.removeArrangedSubview($0)
                     $0.isHidden = true
                 }
@@ -77,6 +87,16 @@ extension ViewController: Showable {
     }
     
     func endProcess(about customer: Customer) { // 업무중 열에있는 업무를 삭제하는 UI Update 구현
-        print("endProcess")
+        let number = customer.number
+        let business = customer.business
+        DispatchQueue.main.async { [self] in
+            mainView?.processingStackView.arrangedSubviews.forEach {
+                let label = $0 as? UILabel
+                if label?.text == "\(number) - \(business.name)" {
+                    mainView?.processingStackView.removeArrangedSubview($0)
+                    $0.isHidden = true
+                }
+            }
+        }
     }
 }

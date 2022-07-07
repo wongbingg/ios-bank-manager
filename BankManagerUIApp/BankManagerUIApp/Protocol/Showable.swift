@@ -10,4 +10,5 @@ import Foundation
 protocol Showable {
     func startProcess(about customer: Customer)
     func endProcess(about customer: Customer)
+    func allWorkisFinished()
 }

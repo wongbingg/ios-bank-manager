@@ -122,9 +122,9 @@
 		AFDFC12B2876FE6000B5E21E /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
+				AFDFC13C2877181C00B5E21E /* Showable.swift */,
 				AFDFC1272876FE4000B5E21E /* Queue.swift */,
 				AFDFC1292876FE5500B5E21E /* Queue+Extension.swift */,
-				AFDFC13C2877181C00B5E21E /* Showable.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
