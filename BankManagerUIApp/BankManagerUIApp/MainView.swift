@@ -109,26 +109,6 @@ class MainView: UIView {
         stackview.axis = .vertical
         return stackview
     }()
-    //MARK: - test
-    let test1Label: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.numberOfLines = 0
-        label.text = "test1asdfasdfjakls;dfjasdkl;fjadklsfjadkls;fjadkls;jfadkls;fjla;dskfjadls;kfjadsl;kfjadlsasdfasdfasdfkajsdklfjaklsdfjaklsdjfklasdjfklasdjfakldsjflkadsjfkladsjfadkls;jfadkls;fjalsk;dfjakls;djfkl;adsjfakl;sdjfl;aksdfjkl;adsfjakls;djfakl;dsjfakl;dsfjadkls;jfadksl;fjadkls;fjakl;sdwjfakljsdfkljasl;dfkjaskl;dfjadkls;mnvkl;asnmvklnasdklvnasklvnaklsdnvklsdnvklasdnvklasdnvklndsvklasndklnvadklsnvadklsnvklasdnklvnasdklnvklasdnvkla;sdkjfklasdmnfkladsmnfklsndvjkldnv;a;kfjadkls;fjakl;sdfjadkls;fjal;sdjftest1asdfasdfjakls;dfjasdkl;fjadklsfjadkls;fjadkls;jfadkls;fjla;dskfjadls;kfjadsl;kfjadlsasdfasdfasdfkajsdklfjaklsdfjaklsdjfklasdjfklasdjfakldsjflkadsjfkladsjfadkls;jfadkls;fjalsk;dfjakls;djfkl;adsjfakl;sdjfl;aksdfjkl;adsfjakls;djfakl;dsjfakl;dsfjadkls;jfadksl;fjadkls;fjakl;sdwjfakljsdfkljasl;dfkjaskl;dfjadkls;mnvkl;asnmvklnasdklvnasklvnaklsdnvklsdnvklasdnvklasdnvklndsvklasndklnvadklsnvadklsnvklasdnklvnasdklnvklasdnvkla;sdkjfklasdmnfkladsmnfklsndvjkldnv;a;kfjadkls;fjakl;sdfjadkls;fjal;sdjf"
-        label.textAlignment = .center
-        return label
-    }()
-    
-    let test2Label: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.text = "test2"
-        label.textAlignment = .center
-        return label
-    }()
-    //MARK: - test end
     
     var rootViewController: UIViewController?
     
@@ -137,6 +117,7 @@ class MainView: UIView {
         self.rootViewController = rootViewController
         addAllSubViews()
         designateMainStackConstraints()
+        addProcess(text: "")
     }
     
     required init?(coder: NSCoder) {
@@ -156,9 +137,6 @@ class MainView: UIView {
         currentStateStackView.addArrangedSubview(waitingLabel)
         currentStateStackView.addArrangedSubview(processingLabel)
         mainStackView.addArrangedSubview(currentStateStackView)
-        
-        waitingStackView.addArrangedSubview(test1Label) //test
-        waitingStackView.addArrangedSubview(test2Label) //test
         
         waitingScrollView.addSubview(waitingStackView) // 스크롤뷰 안의 버티컬 스택뷰를 넣어줌
         processingScrollView.addSubview(processingStackView)  // 스크롤뷰 안에 요소를 넣어주어야 생기려나 ? 스크롤뷰 제약에서 에러가 나는듯
@@ -202,5 +180,17 @@ class MainView: UIView {
         processingScrollView.leadingAnchor.constraint(equalTo: rootViewController.view.centerXAnchor).isActive = true
         processingScrollView.trailingAnchor.constraint(equalTo: rootViewController.view.trailingAnchor).isActive = true
         processingScrollView.bottomAnchor.constraint(equalTo: rootViewController.view.bottomAnchor).isActive = true
+    }
+    
+    func addProcess(text: String) {
+        let processLabel: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.preferredFont(forTextStyle: .title2)
+            label.text = text
+            label.textAlignment = .center
+            return label
+        }()
+        waitingStackView.addArrangedSubview(processLabel)
     }
 }
