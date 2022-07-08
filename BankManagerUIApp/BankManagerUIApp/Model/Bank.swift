@@ -24,11 +24,6 @@ struct Bank {
         self.queue = queue
     }
     
-    mutating func start() {
-        updateCustomerQueue()
-        handleCustomer()
-    }
-    
     mutating func updateCustomerQueue() {
         let businessList = [Business.loan, Business.deposit]
         

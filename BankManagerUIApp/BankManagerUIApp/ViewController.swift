@@ -20,15 +20,19 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var manager = BankManager()
-        let queue = CustomerQueue()
-        manager.delegate = self
-        bank = Bank(employee: manager, customer: queue)
-        bank?.delegate = self
+        configureBankType()
         mainView = MainView(self)
         mainView?.addTenCustomerButton.addTarget(self, action: #selector(addTenCustomerButtonDidTapped), for: .touchUpInside)
         mainView?.resetButton.addTarget(self, action: #selector(resetButtonDidTapped), for: .touchUpInside)
         timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
+    }
+    
+    func configureBankType() {
+        var manager = BankManager()
+        let queue = CustomerQueue()
+        bank = Bank(employee: manager, customer: queue)
+        manager.delegate = self
+        bank?.delegate = self
     }
     
     @objc func addTenCustomerButtonDidTapped(_ sender: UIButton) {
@@ -59,10 +63,7 @@ class ViewController: UIViewController {
         self.counter += 0.001
         let currentTime = self.mFormatter.string(from: Date(timeIntervalSince1970: self.counter))
         self.mainView?.processTimeLabel.text = "업무시간 - \(currentTime)"
-        
     }
-    
-    
 }
 
 extension ViewController: Showable {
@@ -78,7 +79,7 @@ extension ViewController: Showable {
             mainView?.waitingStackView.arrangedSubviews.forEach { // label 에 접근해야한다. 그 label이 제시된 string과 같다면 제거해주는 로직
                 let label = $0 as? UILabel
                 if label?.text == "\(number) - \(business.name)" {
-                    mainView?.waitingStackView.removeArrangedSubview($0)
+                    mainView?.waitingStackView.removeArrangedSubview($0) // UI 변경
                     $0.isHidden = true
                 }
             }
