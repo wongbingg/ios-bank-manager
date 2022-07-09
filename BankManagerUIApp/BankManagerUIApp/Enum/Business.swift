@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Business: String, CaseIterable {
+enum Business: String {
     case deposit = "예금"
     case loan = "대출"
     
