@@ -48,7 +48,7 @@ class MainView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .title2)
-        label.text = "업무시간 - 04:33:253"
+        label.text = "업무시간 - 00:00:000"
         label.textAlignment = .center
         return label
     }()
@@ -151,7 +151,7 @@ class MainView: UIView {
         mainStackView.topAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
         mainStackView.leadingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         mainStackView.trailingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        mainStackView.bottomAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.bottomAnchor, constant: -700).isActive = true
+        mainStackView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.17 ).isActive = true
         
         waitingStackView.topAnchor.constraint(equalTo: waitingScrollView.topAnchor).isActive = true
         waitingStackView.leadingAnchor.constraint(equalTo: waitingScrollView.leadingAnchor).isActive = true

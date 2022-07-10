@@ -24,18 +24,18 @@ class ViewController: UIViewController {
         mainView = MainView(self)
         mainView?.addTenCustomerButton.addTarget(self, action: #selector(addTenCustomerButtonDidTapped), for: .touchUpInside)
         mainView?.resetButton.addTarget(self, action: #selector(resetButtonDidTapped), for: .touchUpInside)
-        timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
     }
     
     func configureBankType() {
         var manager = BankManager()
+        manager.delegate = self
         let queue = CustomerQueue()
         bank = Bank(employee: manager, customer: queue)
-        manager.delegate = self
         bank?.delegate = self
     }
     
     @objc func addTenCustomerButtonDidTapped(_ sender: UIButton) {
+        timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
         let prevQueue = bank?.queue.currentList
         bank?.updateCustomerQueue()
         let currentQueue = bank?.queue.currentList.filter { prevQueue?.contains($0) == false}
@@ -56,6 +56,7 @@ class ViewController: UIViewController {
             $0.isHidden = true
         }
         timer?.invalidate()
+        counter = 0.0
         self.mainView?.processTimeLabel.text = "업무시간 - 00:00:000"
     }
     
