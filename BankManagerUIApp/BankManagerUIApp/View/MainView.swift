@@ -9,7 +9,7 @@ import UIKit
 
 class MainView: UIView {
     
-    private let mainStackView: UIStackView = {
+    let mainStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.axis = .vertical
         stackview.translatesAutoresizingMaskIntoConstraints = false
@@ -19,7 +19,7 @@ class MainView: UIView {
         return stackview
     }()
     
-    private let twoButtonStackView: UIStackView = {
+    let twoButtonStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.axis = .horizontal
         stackview.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,7 @@ class MainView: UIView {
         return label
     }()
     
-    private let currentStateStackView: UIStackView = {
+    let currentStateStackView: UIStackView = {
        let stackview = UIStackView()
         stackview.axis = .horizontal
         stackview.translatesAutoresizingMaskIntoConstraints = false
@@ -62,7 +62,7 @@ class MainView: UIView {
         return stackview
     }()
     
-    private let waitingLabel: UILabel = {
+    let waitingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -73,7 +73,7 @@ class MainView: UIView {
         return label
     }()
     
-    private let processingLabel: UILabel = {
+    let processingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -84,13 +84,13 @@ class MainView: UIView {
         return label
     }()
     
-    private let waitingScrollView: UIScrollView = {
+    let waitingScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
-    private let processingScrollView: UIScrollView = {
+    let processingScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
@@ -117,14 +117,14 @@ class MainView: UIView {
         self.rootViewController = rootViewController
         addAllSubViews()
         designateMainStackConstraints()
-        addProcessInWaitingColumn(text: "")
+        addProcess(text: "")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func addAllSubViews() {
+    func addAllSubViews() {
         guard let rootViewController = rootViewController else { return }
         rootViewController.view.addSubview(mainStackView)
         
@@ -146,7 +146,7 @@ class MainView: UIView {
         
     }
     
-    private func designateMainStackConstraints() {
+    func designateMainStackConstraints() {
         guard let rootViewController = rootViewController else { return }
         mainStackView.topAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
         mainStackView.leadingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
@@ -182,25 +182,33 @@ class MainView: UIView {
         processingScrollView.bottomAnchor.constraint(equalTo: rootViewController.view.bottomAnchor).isActive = true
     }
     
-    func addProcessInWaitingColumn(text: String) {
-        let processLabel = makeLabel(with: text)
+    func addProcess(text: String) {
+        let processLabel: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.preferredFont(forTextStyle: .title2)
+            if text.hasSuffix("대출") {
+                label.textColor = .systemPurple
+            }
+            label.text = text
+            label.textAlignment = .center
+            return label
+        }()
         waitingStackView.addArrangedSubview(processLabel)
     }
     
-    func addProcessInProcessingColumn(text: String) {
-        let processLabel = makeLabel(with: text)
+    func startProcessing(text: String) {
+        let processLabel: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = UIFont.preferredFont(forTextStyle: .title2)
+            if text.hasSuffix("대출") {
+                label.textColor = .systemPurple
+            }
+            label.text = text
+            label.textAlignment = .center
+            return label
+        }()
         processingStackView.addArrangedSubview(processLabel)
-    }
-    
-    private func makeLabel(with text: String) -> UILabel {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
-        if text.hasSuffix("대출") {
-            label.textColor = .systemPurple
-        }
-        label.text = text
-        label.textAlignment = .center
-        return label
     }
 }

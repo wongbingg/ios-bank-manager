@@ -20,17 +20,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var manager = BankManager()
-        manager.delegate = self
-        let queue = CustomerQueue()
-        bank = Bank(employee: manager, customer: queue)
-        bank?.delegate = self
+        configureBankType()
         mainView = MainView(self)
         mainView?.addTenCustomerButton.addTarget(self, action: #selector(addTenCustomerButtonDidTapped), for: .touchUpInside)
         mainView?.resetButton.addTarget(self, action: #selector(resetButtonDidTapped), for: .touchUpInside)
         timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
-        timer?.invalidate()
-        self.mainView?.processTimeLabel.text = "업무시간 - 00:00:000"
     }
     
     func configureBankType() {
@@ -47,14 +41,13 @@ class ViewController: UIViewController {
         let currentQueue = bank?.queue.currentList.filter { prevQueue?.contains($0) == false}
         currentQueue?.forEach { customer in
             guard let number = customer?.number, let business = customer?.business else { return }
-            mainView?.addProcessInWaitingColumn(text: "\(number) - \(business.name)" )
+            mainView?.addProcess(text: "\(number) - \(business.name)" )
         }
         bank?.handleCustomer()
         
         if timer?.isValid == false {
             timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
         }
-        
     }
     
     @objc func resetButtonDidTapped(_ sender: UIButton) {
@@ -62,7 +55,6 @@ class ViewController: UIViewController {
             mainView?.waitingStackView.removeArrangedSubview($0)
             $0.isHidden = true
         }
-        counter = 0.0
         timer?.invalidate()
         self.mainView?.processTimeLabel.text = "업무시간 - 00:00:000"
     }
@@ -70,9 +62,7 @@ class ViewController: UIViewController {
     @objc func fire() {
         self.counter += 0.001
         let currentTime = self.mFormatter.string(from: Date(timeIntervalSince1970: self.counter))
-        DispatchQueue.main.async {
-            self.mainView?.processTimeLabel.text = "업무시간 - \(currentTime)"
-        }
+        self.mainView?.processTimeLabel.text = "업무시간 - \(currentTime)"
     }
 }
 
@@ -93,7 +83,7 @@ extension ViewController: Showable {
                     $0.isHidden = true
                 }
             }
-            mainView?.addProcessInProcessingColumn(text: "\(number) - \(business.name)")
+            mainView?.startProcessing(text: "\(number) - \(business.name)")
         }
     }
     
