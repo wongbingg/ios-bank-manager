@@ -52,7 +52,6 @@ final class LinkedList<T> {
             head = Node(data)
         } else {
             var node = head
-            
             while node?.next != nil {
                 node = node?.next
             }
@@ -65,10 +64,8 @@ final class LinkedList<T> {
         guard head != nil else {
             return nil
         }
-        
         let removedNode = head
         head = head?.next
-        
         return removedNode?.data
     }
     
