@@ -116,7 +116,6 @@ final class MainView: UIView {
         setupMainStackConstraints()
         setupScrollViewConstraints()
         setupScrollViewInsideConstraints()
-        addProcessInWaitingStackView(text: "")
     }
     
     required init?(coder: NSCoder) {
@@ -181,7 +180,7 @@ final class MainView: UIView {
         ])
     }
     
-    func addProcessInWaitingStackView(text: String) {
+    func addProcess(with text: String, in state: State) {
         let processLabel: UILabel = {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -193,21 +192,15 @@ final class MainView: UIView {
             label.textAlignment = .center
             return label
         }()
-        waitingStackView.addArrangedSubview(processLabel)
+        if state == .processing {
+            processingStackView.addArrangedSubview(processLabel)
+        } else {
+            waitingStackView.addArrangedSubview(processLabel)
+        }
     }
-    
-    func addProcessInProcessingStackView(text: String) {
-        let processLabel: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.preferredFont(forTextStyle: .title2)
-            if text.hasSuffix("대출") {
-                label.textColor = .systemPurple
-            }
-            label.text = text
-            label.textAlignment = .center
-            return label
-        }()
-        processingStackView.addArrangedSubview(processLabel)
-    }
+}
+
+enum State {
+    case processing
+    case waiting
 }

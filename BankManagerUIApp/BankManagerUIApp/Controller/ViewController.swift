@@ -91,7 +91,7 @@ final class ViewController: UIViewController {
             }
             
             let workItem = "\(number) - \(business.name)"
-            mainView.addProcessInWaitingStackView(text: workItem)
+            mainView.addProcess(with: workItem, in: .waiting)
         }
         bank?.handleCustomer()
         
@@ -134,7 +134,7 @@ extension ViewController: Workable {
                 return
             }
             self?.mainView.waitingStackView.removeSubview(label)
-            self?.mainView.addProcessInProcessingStackView(text: customerOnProcessing)
+            self?.mainView.addProcess(with: customerOnProcessing, in: .processing)
         }
     }
     
