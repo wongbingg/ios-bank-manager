@@ -7,22 +7,19 @@
 
 import UIKit
 
-class MainView: UIView {
-    
-    let mainStackView: UIStackView = {
+final class MainView: UIView {
+    private let mainStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.axis = .vertical
         stackview.translatesAutoresizingMaskIntoConstraints = false
-        stackview.alignment = .fill
-        stackview.distribution = .fill
         return stackview
     }()
     
-    let twoButtonStackView: UIStackView = {
+    // MARK: - Buttons
+    private let twoButtonStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.axis = .horizontal
         stackview.translatesAutoresizingMaskIntoConstraints = false
-        stackview.alignment = .fill
         stackview.distribution = .fillEqually
         return stackview
     }()
@@ -43,6 +40,7 @@ class MainView: UIView {
         return button
     }()
     
+    // MARK: - Process Time
     let processTimeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -52,16 +50,16 @@ class MainView: UIView {
         return label
     }()
     
-    let currentStateStackView: UIStackView = {
+    // MARK: - 대기중/ 업무중
+    private let currentStateStackView: UIStackView = {
        let stackview = UIStackView()
         stackview.axis = .horizontal
         stackview.translatesAutoresizingMaskIntoConstraints = false
-        stackview.alignment = .fill
         stackview.distribution = .fillEqually
         return stackview
     }()
     
-    let waitingLabel: UILabel = {
+    private let waitingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -72,7 +70,7 @@ class MainView: UIView {
         return label
     }()
     
-    let processingLabel: UILabel = {
+    private let processingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
@@ -83,13 +81,8 @@ class MainView: UIView {
         return label
     }()
     
-    let waitingScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
-    
-    let processingScrollView: UIScrollView = {
+    // MARK: - 대기중 scrollView
+    private let waitingScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
@@ -102,6 +95,13 @@ class MainView: UIView {
         return stackview
     }()
     
+    // MARK: - 업무중 scrollView
+    private let processingScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
     let processingStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.translatesAutoresizingMaskIntoConstraints = false
@@ -109,13 +109,13 @@ class MainView: UIView {
         return stackview
     }()
     
-    var rootViewController: UIViewController?
-    
-    init(_ rootViewController: UIViewController) {
+    // MARK: - Initializers
+    init() {
         super.init(frame: .null)
-        self.rootViewController = rootViewController
         addAllSubViews()
-        designateMainStackConstraints()
+        setupMainStackConstraints()
+        setupScrollViewConstraints()
+        setupScrollViewInsideConstraints()
         addProcessInWaitingStackView(text: "")
     }
     
@@ -123,59 +123,62 @@ class MainView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addAllSubViews() {
-        guard let rootViewController = rootViewController else { return }
-        rootViewController.view.addSubview(mainStackView)
+    // MARK: - Methods
+    private func addAllSubViews() {
+        addSubview(mainStackView)
+        addSubview(waitingScrollView)
+        addSubview(processingScrollView)
         
         twoButtonStackView.addArrangedSubview(addTenCustomerButton)
         twoButtonStackView.addArrangedSubview(resetButton)
-        mainStackView.addArrangedSubview(twoButtonStackView)
-        
-        mainStackView.addArrangedSubview(processTimeLabel)
-        
         currentStateStackView.addArrangedSubview(waitingLabel)
         currentStateStackView.addArrangedSubview(processingLabel)
+        
+        mainStackView.addArrangedSubview(twoButtonStackView)
+        mainStackView.addArrangedSubview(processTimeLabel)
         mainStackView.addArrangedSubview(currentStateStackView)
         
         waitingScrollView.addSubview(waitingStackView)
         processingScrollView.addSubview(processingStackView)
-        
-        rootViewController.view.addSubview(waitingScrollView)
-        rootViewController.view.addSubview(processingScrollView)
     }
     
-    func designateMainStackConstraints() {
-        guard let rootViewController = rootViewController else { return }
-        mainStackView.topAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        mainStackView.leadingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        mainStackView.trailingAnchor.constraint(equalTo: rootViewController.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        mainStackView.heightAnchor.constraint(equalTo: rootViewController.view.heightAnchor, multiplier: 0.17 ).isActive = true
-        
-        waitingStackView.topAnchor.constraint(equalTo: waitingScrollView.topAnchor).isActive = true
-        waitingStackView.leadingAnchor.constraint(equalTo: waitingScrollView.leadingAnchor).isActive = true
-        waitingStackView.widthAnchor.constraint(equalTo: waitingScrollView.widthAnchor).isActive = true
-        let frameConstraints = waitingStackView.widthAnchor.constraint(equalTo: waitingScrollView.frameLayoutGuide.widthAnchor)
-        frameConstraints.priority = .defaultLow
-        frameConstraints.isActive = true
-        waitingStackView.bottomAnchor.constraint(equalTo: waitingScrollView.bottomAnchor).isActive = true
-
-        processingStackView.topAnchor.constraint(equalTo: processingScrollView.topAnchor).isActive = true
-        processingStackView.leadingAnchor.constraint(equalTo: processingScrollView.leadingAnchor).isActive = true
-        processingStackView.widthAnchor.constraint(equalTo: processingScrollView.widthAnchor).isActive = true
-        let frameConstraints2 = processingStackView.widthAnchor.constraint(equalTo: processingScrollView.frameLayoutGuide.widthAnchor)
-        frameConstraints2.priority = .defaultLow
-        frameConstraints2.isActive = true
-        processingStackView.bottomAnchor.constraint(equalTo: processingScrollView.bottomAnchor).isActive = true
-        
-        waitingScrollView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor).isActive = true
-        waitingScrollView.leadingAnchor.constraint(equalTo: rootViewController.view.leadingAnchor).isActive = true
-        waitingScrollView.trailingAnchor.constraint(equalTo: rootViewController.view.centerXAnchor).isActive = true
-        waitingScrollView.bottomAnchor.constraint(equalTo: rootViewController.view.bottomAnchor).isActive = true
-
-        processingScrollView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor).isActive = true
-        processingScrollView.leadingAnchor.constraint(equalTo: rootViewController.view.centerXAnchor).isActive = true
-        processingScrollView.trailingAnchor.constraint(equalTo: rootViewController.view.trailingAnchor).isActive = true
-        processingScrollView.bottomAnchor.constraint(equalTo: rootViewController.view.bottomAnchor).isActive = true
+    private func setupMainStackConstraints() {
+        NSLayoutConstraint.activate([
+            mainStackView.topAnchor.constraint(equalTo: topAnchor),
+            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            mainStackView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.17 )
+        ])
+    }
+    
+    private func setupScrollViewConstraints() {
+        NSLayoutConstraint.activate([
+            waitingScrollView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor),
+            waitingScrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            waitingScrollView.trailingAnchor.constraint(equalTo: centerXAnchor),
+            waitingScrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            processingScrollView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor),
+            processingScrollView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            processingScrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            processingScrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
+    private func setupScrollViewInsideConstraints() {
+        NSLayoutConstraint.activate([
+            waitingStackView.topAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.topAnchor),
+            waitingStackView.bottomAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.bottomAnchor),
+            waitingStackView.leadingAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.leadingAnchor),
+            waitingStackView.trailingAnchor.constraint(equalTo: waitingScrollView.contentLayoutGuide.trailingAnchor),
+            waitingStackView.widthAnchor.constraint(equalTo: waitingScrollView.widthAnchor),
+            
+            processingStackView.topAnchor.constraint(equalTo: processingScrollView.contentLayoutGuide.topAnchor),
+            processingStackView.bottomAnchor.constraint(equalTo: processingScrollView.contentLayoutGuide.bottomAnchor),
+            processingStackView.leadingAnchor.constraint(equalTo: processingScrollView.contentLayoutGuide.leadingAnchor),
+            processingStackView.trailingAnchor.constraint(equalTo: processingScrollView.contentLayoutGuide.trailingAnchor),
+            processingStackView.widthAnchor.constraint(equalTo: processingScrollView.widthAnchor),
+        ])
     }
     
     func addProcessInWaitingStackView(text: String) {
