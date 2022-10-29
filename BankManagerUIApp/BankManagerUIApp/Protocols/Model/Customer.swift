@@ -6,6 +6,6 @@
 //
 
 struct Customer: Equatable {
-    var number: Int
-    var business: Business
+    let number: Int
+    let business: Business
 }

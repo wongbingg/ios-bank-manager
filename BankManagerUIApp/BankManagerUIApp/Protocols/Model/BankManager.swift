@@ -5,13 +5,16 @@
 //
 
 import Foundation
+
+protocol BankManager {
+    func handle(customer: Customer)
+}
  
-struct BankManager {
-    var delegate: WorkProtocol?
+struct BankManagerImp: BankManager {
+    var delegate: Workable?
     
     func handle(customer: Customer) {
         let processTime = customer.business.processTime
-        
         delegate?.startProcess(about: customer)
         Thread.sleep(forTimeInterval: processTime)
         delegate?.endProcess(about: customer)
