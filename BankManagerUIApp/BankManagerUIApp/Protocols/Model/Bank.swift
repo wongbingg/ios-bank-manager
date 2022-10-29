@@ -24,18 +24,6 @@ struct Bank {
         self.queue = queue
     }
     
-    mutating func updateCustomerQueue() {
-        let businessList = [Business.loan, Business.deposit]
-        
-        (countOfCustomer...(countOfCustomer + 9)).forEach { number in
-            let randomNumber = Int.random(in: 0...1)
-            let customer = Customer(number: number, business: businessList[randomNumber])
-            
-            queue.enqueue(data: customer)
-        }
-        countOfCustomer += 10
-    }
-    
     mutating func handleCustomer() {
         
         for _ in 0..<queue.count {
