@@ -20,4 +20,3 @@ struct BankManagerImp: BankManager {
         delegate?.endProcess(about: customer)
     }
 }
-

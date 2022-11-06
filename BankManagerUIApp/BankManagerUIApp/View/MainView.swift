@@ -192,6 +192,7 @@ final class MainView: UIView {
             label.textAlignment = .center
             return label
         }()
+        
         if state == .processing {
             processingStackView.addArrangedSubview(processLabel)
         } else {
