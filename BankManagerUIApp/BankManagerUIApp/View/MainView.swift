@@ -180,6 +180,8 @@ final class MainView: UIView {
         ])
     }
     
+        guard let label = stack.find(label: name) else { return }
+        stack.removeSubview(label)
     func addProcess(with text: String, in state: State) {
         let processLabel: UILabel = {
             let label = UILabel()
