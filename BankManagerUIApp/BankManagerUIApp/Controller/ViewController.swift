@@ -19,9 +19,9 @@ final class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bank = BankImp(delegate: self)
         setupInitialView()
         setupButton()
-        makeBankInstance()
         startTimer()
         timer?.invalidate()
     }
@@ -51,18 +51,6 @@ final class ViewController: UIViewController {
         )
     }
     
-    private func makeBankInstance() {
-        bank = Bank(employee: makeManagerInstance(),
-                    customer: CustomerQueue())
-        bank?.delegate = self
-    }
-    
-    private func makeManagerInstance() -> BankManager {
-        var manager = BankManagerImp()
-        manager.delegate = self
-        return manager
-    }
-    
     private func startTimer() {
         timer = Timer.scheduledTimer(
             timeInterval: 0.001,
@@ -84,6 +72,10 @@ final class ViewController: UIViewController {
                 let workItem = customer.generateLabel()
                 self?.mainView.addProcess(with: workItem, in: .waiting)
             }
+            self?.bank?.handleCustomer() // 실행 시점이 여기가 맞는지
+        }
+    }
+    
     @objc private func fire() {
         self.counter += 0.001
         let currentTime = self.formatter.string(
@@ -93,25 +85,15 @@ final class ViewController: UIViewController {
     }
     
     @objc private func addTenCustomerButtonDidTapped(_ sender: UIButton) {
+        bank?.addTenCustomer()
         RunLoop.main.add(timer ?? Timer(), forMode: .common)
-        bank?.updateCustomerQueue()
-        bank?.queue.currentList.forEach { customer in
-            guard let number = customer?.number,
-                  let business = customer?.business else {
-                return
-            }
-            
-            let workItem = "\(number) - \(business.name)"
-            mainView.addProcess(with: workItem, in: .waiting)
-        }
-        bank?.handleCustomer()
-        
         if timer?.isValid == false {
             startTimer()
         }
     }
     
     @objc private func resetButtonDidTapped(_ sender: UIButton) {
+        bank?.resetCustomer()
         counter = 0.0
         self.mainView.processTimeLabel.text = "업무시간 - 00:00:000"
         timer?.invalidate()
