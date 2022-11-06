@@ -73,6 +73,11 @@ final class ViewController: UIViewController {
         )
     }
     
+            list.forEach { customer in
+                guard let customer = customer else { return }
+                let workItem = customer.generateLabel()
+                self?.mainView.addProcess(with: workItem, in: .waiting)
+            }
     @objc private func fire() {
         self.counter += 0.001
         let currentTime = self.formatter.string(
@@ -122,8 +127,7 @@ extension ViewController: Workable {
     }
     
     func startProcess(about customer: Customer) {
-        let customerOnProcessing = "\(customer.number) - \(customer.business.name)"
-        
+        let customerOnProcessing = customer.generateLabel()
         DispatchQueue.main.async { [weak self] in
             let labelList = self?.mainView.waitingStackView.arrangedSubviews.compactMap {
                 $0 as? UILabel
@@ -139,8 +143,7 @@ extension ViewController: Workable {
     }
     
     func endProcess(about customer: Customer) {
-        let customerOnProcessing = "\(customer.number) - \(customer.business.name)"
-        
+        let customerOnProcessing = customer.generateLabel()
         DispatchQueue.main.async { [weak self] in
             let labelList = self?.mainView.processingStackView.arrangedSubviews.compactMap {
                 $0 as? UILabel

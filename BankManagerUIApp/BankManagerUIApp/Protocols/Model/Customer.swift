@@ -8,4 +8,8 @@
 struct Customer: Equatable {
     let number: Int
     let business: Business
+    
+    func generateLabel() -> String {
+        return "\(number) - \(business.name)"
+    }
 }
