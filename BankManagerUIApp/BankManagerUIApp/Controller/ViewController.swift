@@ -7,25 +7,29 @@
 import UIKit
 
 final class ViewController: UIViewController {
+    // MARK: - Properties
     private let mainView = MainView()
     private var bank: Bank?
     private var timer: Timer?
     private var counter = 0.0
-    lazy var formatter: DateFormatter = {
+    private lazy var formatter: DateFormatter = {
         let format = DateFormatter()
         format.dateFormat = "mm:ss:SSS"
         return format
     }()
     
+    // MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         bank = BankImp(delegate: self)
         setupInitialView()
         setupButton()
+        bind()
         startTimer()
         timer?.invalidate()
     }
     
+    // MARK: - Methods
     private func setupInitialView() {
         view.backgroundColor = .systemBackground
         view.addSubview(mainView)
@@ -76,12 +80,13 @@ final class ViewController: UIViewController {
         }
     }
     
+    // MARK: - @objc Methods
     @objc private func fire() {
         self.counter += 0.001
         let currentTime = self.formatter.string(
             from: Date(timeIntervalSince1970: self.counter)
         )
-        self.mainView.processTimeLabel.text = "업무시간 - \(currentTime)"
+        self.mainView.processTimeLabel.text = "업무시간 - " + "\(currentTime)"
     }
     
     @objc private func addTenCustomerButtonDidTapped(_ sender: UIButton) {
@@ -101,6 +106,7 @@ final class ViewController: UIViewController {
     }
 }
 
+// MARK: - Workable
 extension ViewController: Workable {
     
     func allWorkisFinished() {
