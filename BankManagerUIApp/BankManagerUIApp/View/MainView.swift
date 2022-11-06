@@ -88,7 +88,7 @@ final class MainView: UIView {
         return scrollView
     }()
     
-    let waitingStackView: UIStackView = {
+    private let waitingStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.translatesAutoresizingMaskIntoConstraints = false
         stackview.axis = .vertical
@@ -102,7 +102,7 @@ final class MainView: UIView {
         return scrollView
     }()
     
-    let processingStackView: UIStackView = {
+    private let processingStackView: UIStackView = {
         let stackview = UIStackView()
         stackview.translatesAutoresizingMaskIntoConstraints = false
         stackview.axis = .vertical
@@ -180,8 +180,30 @@ final class MainView: UIView {
         ])
     }
     
+    func removeAllSubviews() {
+        waitingStackView.subviews.forEach {
+            waitingStackView.removeSubview($0)
+        }
+        processingStackView.subviews.forEach {
+            processingStackView.removeSubview($0)
+        }
+    }
+    
+    func moveCell(name: String, on state: State) {
+        var stack: UIStackView
+        if state == .waiting {
+            stack = waitingStackView
+        } else {
+            stack = processingStackView
+        }
         guard let label = stack.find(label: name) else { return }
         stack.removeSubview(label)
+        
+        if state == .waiting {
+            addProcess(with: name, in: .processing)
+        }
+    }
+    
     func addProcess(with text: String, in state: State) {
         let processLabel: UILabel = {
             let label = UILabel()

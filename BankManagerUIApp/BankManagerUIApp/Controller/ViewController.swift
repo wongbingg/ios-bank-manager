@@ -73,6 +73,12 @@ final class ViewController: UIViewController {
         )
     }
     
+    private func bind() {
+        bank?.bindUI { [weak self](list) in
+            guard list.count > 0 else {
+                self?.mainView.removeAllSubviews()
+                return
+            }
             list.forEach { customer in
                 guard let customer = customer else { return }
                 let workItem = customer.generateLabel()
@@ -106,17 +112,10 @@ final class ViewController: UIViewController {
     }
     
     @objc private func resetButtonDidTapped(_ sender: UIButton) {
-        removeAllSubviews(in: mainView.waitingStackView)
-        removeAllSubviews(in: mainView.processingStackView)
         counter = 0.0
         self.mainView.processTimeLabel.text = "업무시간 - 00:00:000"
         timer?.invalidate()
-    }
-    
-    private func removeAllSubviews(in view: UIStackView?) {
-        view?.subviews.forEach {
-            view?.removeSubview($0)
-        }
+        
     }
 }
 
@@ -129,31 +128,20 @@ extension ViewController: Workable {
     func startProcess(about customer: Customer) {
         let customerOnProcessing = customer.generateLabel()
         DispatchQueue.main.async { [weak self] in
-            let labelList = self?.mainView.waitingStackView.arrangedSubviews.compactMap {
-                $0 as? UILabel
-            }.filter {
-                $0.text == customerOnProcessing
-            }
-            guard let label = labelList?.first else {
-                return
-            }
-            self?.mainView.waitingStackView.removeSubview(label)
-            self?.mainView.addProcess(with: customerOnProcessing, in: .processing)
+            self?.mainView.moveCell(
+                name: customerOnProcessing,
+                on: .waiting
+            )
         }
     }
     
     func endProcess(about customer: Customer) {
         let customerOnProcessing = customer.generateLabel()
         DispatchQueue.main.async { [weak self] in
-            let labelList = self?.mainView.processingStackView.arrangedSubviews.compactMap {
-                $0 as? UILabel
-            }.filter {
-                $0.text == customerOnProcessing
-            }
-            guard let label = labelList?.first else {
-                return
-            }
-            self?.mainView.processingStackView.removeSubview(label)
+            self?.mainView.moveCell(
+                name: customerOnProcessing,
+                on: .processing
+            )
         }
     }
 }
