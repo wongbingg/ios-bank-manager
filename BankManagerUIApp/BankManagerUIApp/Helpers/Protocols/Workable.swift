@@ -10,5 +10,5 @@ import Foundation
 protocol Workable {
     func startProcess(about customer: Customer)
     func endProcess(about customer: Customer)
-    func allWorkisFinished()
+    func allWorkFinished()
 }

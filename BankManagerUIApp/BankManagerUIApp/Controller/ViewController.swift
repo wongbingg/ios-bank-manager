@@ -109,7 +109,7 @@ final class ViewController: UIViewController {
 // MARK: - Workable
 extension ViewController: Workable {
     
-    func allWorkisFinished() {
+    func allWorkFinished() {
         timer?.invalidate()
     }
     

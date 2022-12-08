@@ -57,7 +57,7 @@ final class BankImp: Bank {
         let completionOperation = BlockOperation { [self] in
             if loanBusinessQueueO.operationCount == 0 &&
                 depositBusinessQueueO.operationCount == 0 {
-                delegate.allWorkisFinished()
+                delegate.allWorkFinished()
             }
         }
         var loanWorks = [Operation]()
