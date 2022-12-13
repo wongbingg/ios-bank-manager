@@ -29,8 +29,11 @@ final class CustomerQueue: Queue {
         let businessList = [Business.loan, Business.deposit]
         var result = [Customer]()
         (countOfCustomer...(countOfCustomer + 9)).forEach { number in
-            let randomNumber = Int.random(in: 0...1)
-            let customer = Customer(number: number, business: businessList[randomNumber])
+            guard let randomBusiness = businessList.randomElement() else {
+                return
+            }
+            let customer = Customer(number: number,
+                                    business: randomBusiness)
             result.append(customer)
         }
         countOfCustomer += 10
