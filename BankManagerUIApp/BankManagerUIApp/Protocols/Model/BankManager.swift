@@ -11,7 +11,7 @@ protocol BankManager {
 }
  
 struct BankManagerImp: BankManager {
-    var delegate: Workable?
+    weak var delegate: Workable?
     
     func handle(customer: Customer) {
         let processTime = customer.business.processTime

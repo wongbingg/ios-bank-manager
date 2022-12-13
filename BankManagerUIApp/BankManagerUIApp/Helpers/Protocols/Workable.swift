@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Workable {
+protocol Workable: AnyObject {
     func startProcess(about customer: Customer)
     func endProcess(about customer: Customer)
     func allWorkFinished()

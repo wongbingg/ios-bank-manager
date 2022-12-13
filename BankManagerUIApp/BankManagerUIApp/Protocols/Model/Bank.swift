@@ -17,7 +17,7 @@ protocol Bank {
 final class BankImp: Bank {
     
     // MARK: - Properties
-    private let delegate: Workable
+    weak var delegate: Workable?
     private let queue = CustomerQueue()
     private var bankManager = BankManagerImp()
 
@@ -57,7 +57,7 @@ final class BankImp: Bank {
         let completionOperation = BlockOperation { [self] in
             if loanBusinessQueueO.operationCount == 0 &&
                 depositBusinessQueueO.operationCount == 0 {
-                delegate.allWorkFinished()
+                delegate?.allWorkFinished()
             }
         }
         var loanWorks = [Operation]()
