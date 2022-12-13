@@ -36,8 +36,8 @@
 
 ## 🔭 시각 자료
 ### - UML Diagram
-![](https://i.imgur.com/2jneZ2T.jpg)
 
+![](https://i.imgur.com/U6rImyQ.png)
 
 ### - File Tree
 ```
@@ -142,6 +142,10 @@
 </details>
 
 ## 🛠 Trouble Shooting
+
+### ⚠️ "업무시작", "업무 끝", "모든업무 끝" 에 타이밍 전달
+
+- `Workable` 이란 프로토콜을 만들어 delegate 패턴으로 타이밍을 전달 해주었습니다. 
 
 ## 🔗 참고자료
 - 야곰아카데미 GCD 강의
