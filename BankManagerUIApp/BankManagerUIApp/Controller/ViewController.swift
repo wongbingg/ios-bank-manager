@@ -76,7 +76,7 @@ final class ViewController: UIViewController {
                 let workItem = customer.generateLabel()
                 self?.mainView.addProcess(with: workItem, in: .waiting)
             }
-            self?.bank?.handleCustomer() // 실행 시점이 여기가 맞는지
+            self?.bank?.handleCustomer()
         }
     }
     

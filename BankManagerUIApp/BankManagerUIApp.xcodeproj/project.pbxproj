@@ -140,9 +140,9 @@
 		AF5FF183290BB0D20038FCAE /* CustomerQueue */ = {
 			isa = PBXGroup;
 			children = (
+				AF3CC65D287AA25E00A2B4F1 /* CustomerQueue.swift */,
 				AF5FF184290BB1EE0038FCAE /* LinkedList */,
 				AF5FF185290BB3260038FCAE /* Contract */,
-				AF3CC65D287AA25E00A2B4F1 /* CustomerQueue.swift */,
 			);
 			path = CustomerQueue;
 			sourceTree = "<group>";
